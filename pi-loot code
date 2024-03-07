@@ -1,0 +1,269 @@
+from sys import exit #from sys module we will import exit
+import pygame#import pygame
+from pygame import K_SPACE
+pygame.init() #initializes pygame modules
+scr = pygame.display.set_mode((800, 800)) # setting display screen
+scr.fill((0, 0, 0))#screen will be black
+a = pygame.time.Clock()#it will show how many milliseconds of time has passed
+print(a)
+text1 = pygame.font.SysFont("ariel",32)
+f = "press SPACE to play"
+#first page
+class menu(pygame.sprite.Sprite):
+    def __init__(self,posx,posy):
+        super().__init__()
+        self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/front.png").convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.center = [posx, posy]
+        self.mask = pygame.mask.from_surface(self.image)
+class text(pygame.sprite.Sprite):
+    def __init__(self,posx,posy):
+        super().__init__()
+        self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/title2.png").convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.center = [posx, posy]
+        self.mask = pygame.mask.from_surface(self.image)
+
+m_grp = pygame.sprite.Group()
+m = menu(400,400)
+m_grp.add(m)
+te_grp = pygame.sprite.Group()
+te = text(400,390)
+te_grp.add(te)
+#gameplay page
+def page1():
+    #print("page1")
+    scr = pygame.display.set_mode((798, 798))
+    scr.fill((0, 255, 255))
+    text = pygame.font.SysFont("ariel bold", 45)
+    s = 0
+    text2 = pygame.font.SysFont("Tahoma", 40)
+    s1 = 0
+    text3 = pygame.font.SysFont("Tahoma", 35)
+    f1 = "coins:"
+    back_img = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/colonyone.png")
+    back = pygame.transform.scale(back_img, (800, 800))
+    x1 = 0
+    w = back.get_width()
+
+    class rock(pygame.sprite.Sprite):
+        def __init__(self, posx, posy):
+            super().__init__()
+            self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/coinp.png").convert_alpha()
+            self.rect = self.image.get_rect()
+            self.rect.center = [posx, posy]
+            self.mask = pygame.mask.from_surface(self.image)
+
+        def update(self):
+            self.movement()
+
+        def movement(self):
+            self.rect.x -= 1
+            if self.rect.x == 10:
+                self.rect.x = 780
+
+    class obstacle(pygame.sprite.Sprite):
+        def __init__(self, posx, posy):
+            super().__init__()
+            self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/balloon.png").convert_alpha()
+            self.rect = self.image.get_rect()
+            self.rect.center = [posx, posy]
+            self.mask = pygame.mask.from_surface(self.image)
+
+        def update(self):
+            self.movement()
+
+        def movement(self):
+            self.rect.x -= 1
+            if self.rect.x == -140:
+                self.rect.x = 900
+
+    class plane(pygame.sprite.Sprite):
+        def __init__(self, posx, posy):
+            super().__init__()
+            self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/cargo.png").convert_alpha()
+            self.rect = self.image.get_rect()
+            self.rect.center = [posx, posy]
+            self.mask = pygame.mask.from_surface(self.image)
+
+        def update(self):
+            self.movement()
+
+        def movement(self):
+            self.rect.x -= 2
+            if self.rect.x == -120:
+                self.rect.x = 900
+
+    class player(pygame.sprite.Sprite):
+        def __init__(self, posx, posy):
+            super().__init__()
+            self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/plane4.png").convert_alpha()
+            self.rect = self.image.get_rect()
+            self.rect.center = [posx, posy]
+            self.mask = pygame.mask.from_surface(self.image)
+
+        def update(self):
+            self.move()
+
+        def move(self):
+            key = pygame.key.get_pressed()
+            if key[pygame.K_RIGHT]:
+                if self.rect.x < 792:
+                    self.rect.x += 2.6
+            if key[pygame.K_LEFT]:
+                if self.rect.x > 40:
+                    self.rect.x -= 2.6
+            if key[pygame.K_UP]:
+                if self.rect.y > 20:
+                    self.rect.y -= 2.6
+            if key[pygame.K_DOWN]:
+                if self.rect.y < 685:
+                    self.rect.y += 2.6
+ #gameover pop up
+    class box(pygame.sprite.Sprite):
+        def __init__(self,posx,posy):
+            super().__init__()
+            self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/finished.png").convert_alpha()
+            self.rect = self.image.get_rect()
+            self.rect.center = [posx, posy]
+            self.mask = pygame.mask.from_surface(self.image)
+    class btn1(pygame.sprite.Sprite):
+        def __init__(self,posx,posy):
+            super().__init__()
+            self.image = pygame.image.load("C:/Users/Dell/OneDrive/Desktop/icons/btn1.png").convert_alpha()
+            self.rect = self.image.get_rect()
+            self.rect.center = [posx, posy]
+            self.mask = pygame.mask.from_surface(self.image)
+        def press1(self):
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.rect.collidepoint(event.pos):
+                        page1()
+        def update(self):
+            self.press1()
+
+
+
+    obj_grp = pygame.sprite.Group()
+    obj = rock(600, 600)
+    obj_grp.add(obj)
+    obj1_grp = pygame.sprite.Group()
+    obj1 = rock(350, 550)
+    obj1_grp.add(obj)
+    obs_grp = pygame.sprite.Group()
+    obs = obstacle(600, 360)
+    obs_grp.add(obs)
+    obs1_grp = pygame.sprite.Group()
+    obs1 = obstacle(1140, 550)
+    obs1_grp.add(obs1)
+    obj3_grp = pygame.sprite.Group()
+    obj3 = rock(400, 500)
+    obj3_grp.add(obj)
+    obs2_grp = pygame.sprite.Group()
+    obs2 = plane(650, 150)
+    obs2_grp.add(obs2)
+    pl_grp = pygame.sprite.Group()
+    pl = player(100, 600)
+    pl_grp.add(pl)
+    g_grp = pygame.sprite.Group()
+    g = box(400, 1400)
+    g_grp.add(g)
+    b1_grp = pygame.sprite.Group()
+    b1 = btn1(400, 1400)
+    b1_grp.add(b1)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # when clicked on cross button it will exit
+                pygame.quit()
+                exit()
+            #using masks
+            if pygame.sprite.collide_mask(pl, obj):
+                # if pygame.sprite.spritecollide(pl,obj_grp,True):
+                obj.rect.right = 1400
+                s += 1
+                print("collide")
+            if pygame.sprite.collide_mask(pl, obj1):
+                # if pygame.sprite.spritecollide(pl,obj_grp,True):
+                obj1.rect.right = 1000
+                s += 1
+            if pygame.sprite.collide_mask(pl, obj3):
+                # if pygame.sprite.spritecollide(pl,obj_grp,True):
+                obj3.rect.right = 900
+                s += 1
+            if pygame.sprite.collide_mask(pl, obs) or pygame.sprite.collide_mask(pl, obs1):
+                # if pygame.sprite.spritecollide(pl, obj_grp, True):
+                pl.rect.bottom = 2000
+                obs2.rect.bottom = 3000
+                obs.rect.bottom = 3000
+                obs1.rect.bottom = 3000
+                obj.rect.bottom = 4000
+                g.rect.top = 100
+                b1.rect.top = 480
+                print(pl.rect.x)
+                print(pl.rect.y)
+            if pygame.sprite.collide_mask(pl, obs2):
+                pl.rect.bottom = 2000
+                obs2.rect.bottom = 3000
+                obs.rect.bottom = 3000
+                obs1.rect.bottom = 3000
+                obj.rect.bottom = 4000
+                g.rect.top = 100
+                b1.rect.top = 480
+                print(pl.rect.x)
+                print(pl.rect.y)
+
+
+        scr.fill((0, 0, 0))
+#parallax background logic
+        scr.blit(back, (x1, 0))
+        scr.blit(back, (w + x1, 0))
+        x1 -= 1
+        if x1 == -w:
+            scr.blit(back, (x1 + w, 0))
+            x1 = 0
+        if pl.rect.bottom == 2000:
+            scr.blit(back,(0,0))
+        x = text.render(str(round(1 * s)), True, "Yellow")
+        x2 = text2.render(str(round(1 * s1)), True, "White")
+        y2 = text3.render(str(f1), True, "White")
+        obj_grp.update()
+        obj_grp.draw(scr)
+        obj1_grp.update()
+        obj1_grp.draw(scr)
+        obj3_grp.update()
+        obj3_grp.draw(scr)
+        obs_grp.update()
+        obs_grp.draw(scr)
+        obs1_grp.update()
+        obs1_grp.draw(scr)
+        obs2_grp.update()
+        obs2_grp.draw(scr)
+        pl_grp.update()
+        pl_grp.draw(scr)
+        g_grp.update()
+        g_grp.draw(scr)
+        b1_grp.update()
+        b1_grp.draw(scr)
+        scr.blit(x2,(380,35))
+        if pl.rect.bottom != 2000:
+            s1 += 0.01
+        if pl.rect.bottom == 2000:
+            scr.blit(x, (440, 402))
+            scr.blit(y2, (330, 390))
+        pygame.display.update()
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: #when clicked on cross button it will exit
+            pygame.quit()
+            exit()
+    key1 = pygame.key.get_pressed()
+    if key1[K_SPACE]:
+        page1()
+    scr.fill((0, 0, 0))
+    y = text1.render(str(f), True, "White")
+    m_grp.draw(scr)
+    m_grp.update()
+    te_grp.draw(scr)
+    te_grp.update()
+    scr.blit(y, (280,290))
+    pygame.display.update()
